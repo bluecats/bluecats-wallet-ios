@@ -1,0 +1,493 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		56E749791AC0692D00A2589E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749781AC0692D00A2589E /* main.m */; };
+		56E749A11AC06B6F00A2589E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56E7499F1AC06B6F00A2589E /* LaunchScreen.xib */; };
+		56E749A21AC06B6F00A2589E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56E749A01AC06B6F00A2589E /* Main.storyboard */; };
+		56E749A41AC06B9100A2589E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56E749A31AC06B9100A2589E /* Images.xcassets */; };
+		56E749AB1AC06BD000A2589E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749A71AC06BD000A2589E /* AppDelegate.m */; };
+		56E749AC1AC06BD000A2589E /* BCWallet.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 56E749A81AC06BD000A2589E /* BCWallet.xcdatamodel */; };
+		56E749AD1AC06BD000A2589E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749AA1AC06BD000A2589E /* Constants.m */; };
+		56E749BC1AC070B300A2589E /* BarcodeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749B51AC070B300A2589E /* BarcodeCell.m */; };
+		56E749BD1AC070B300A2589E /* CardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749B71AC070B300A2589E /* CardCell.m */; };
+		56E749BE1AC070B300A2589E /* MerchantCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749B91AC070B300A2589E /* MerchantCell.m */; };
+		56E749BF1AC070B300A2589E /* TransactionAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749BB1AC070B300A2589E /* TransactionAlertView.m */; };
+		56E749C21AC070BC00A2589E /* ComparisonUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749C11AC070BC00A2589E /* ComparisonUtilities.m */; };
+		56E749C71AC070C600A2589E /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749C41AC070C600A2589E /* Card.m */; };
+		56E749C81AC070C600A2589E /* Merchant.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749C61AC070C600A2589E /* Merchant.m */; };
+		56E749CA1AC070D600A2589E /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 56E749C91AC070D600A2589E /* logo.png */; };
+		56E749CF1AC0710700A2589E /* AddCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749CC1AC0710700A2589E /* AddCardViewController.m */; };
+		56E749D01AC0710700A2589E /* CardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749CE1AC0710700A2589E /* CardsViewController.m */; };
+		56E749DD1AC0711300A2589E /* BCBeacon+Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749D21AC0711300A2589E /* BCBeacon+Card.m */; };
+		56E749DE1AC0711300A2589E /* Card+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749D41AC0711300A2589E /* Card+Additions.m */; };
+		56E749DF1AC0711300A2589E /* Merchant+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749D61AC0711300A2589E /* Merchant+Additions.m */; };
+		56E749E01AC0711300A2589E /* NSManagedObject+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749D81AC0711300A2589E /* NSManagedObject+Additions.m */; };
+		56E749E11AC0711300A2589E /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749DA1AC0711300A2589E /* UIViewController+Additions.m */; };
+		56E749E21AC0711300A2589E /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749DC1AC0711300A2589E /* UIColor+Additions.m */; };
+		5C0301ABD3321C1E0127F929 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A46D4F87D8AC6054DD2534E4 /* libPods.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		56E749731AC0692D00A2589E /* BCWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BCWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		56E749771AC0692D00A2589E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56E749781AC0692D00A2589E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		56E7499F1AC06B6F00A2589E /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
+		56E749A01AC06B6F00A2589E /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		56E749A31AC06B9100A2589E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		56E749A61AC06BD000A2589E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		56E749A71AC06BD000A2589E /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		56E749A81AC06BD000A2589E /* BCWallet.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BCWallet.xcdatamodel; sourceTree = "<group>"; };
+		56E749A91AC06BD000A2589E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		56E749AA1AC06BD000A2589E /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		56E749B41AC070B300A2589E /* BarcodeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeCell.h; sourceTree = "<group>"; };
+		56E749B51AC070B300A2589E /* BarcodeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarcodeCell.m; sourceTree = "<group>"; };
+		56E749B61AC070B300A2589E /* CardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardCell.h; sourceTree = "<group>"; };
+		56E749B71AC070B300A2589E /* CardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardCell.m; sourceTree = "<group>"; };
+		56E749B81AC070B300A2589E /* MerchantCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MerchantCell.h; sourceTree = "<group>"; };
+		56E749B91AC070B300A2589E /* MerchantCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MerchantCell.m; sourceTree = "<group>"; };
+		56E749BA1AC070B300A2589E /* TransactionAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionAlertView.h; sourceTree = "<group>"; };
+		56E749BB1AC070B300A2589E /* TransactionAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionAlertView.m; sourceTree = "<group>"; };
+		56E749C01AC070BC00A2589E /* ComparisonUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComparisonUtilities.h; sourceTree = "<group>"; };
+		56E749C11AC070BC00A2589E /* ComparisonUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComparisonUtilities.m; sourceTree = "<group>"; };
+		56E749C31AC070C600A2589E /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
+		56E749C41AC070C600A2589E /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
+		56E749C51AC070C600A2589E /* Merchant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Merchant.h; sourceTree = "<group>"; };
+		56E749C61AC070C600A2589E /* Merchant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Merchant.m; sourceTree = "<group>"; };
+		56E749C91AC070D600A2589E /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		56E749CB1AC0710700A2589E /* AddCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddCardViewController.h; sourceTree = "<group>"; };
+		56E749CC1AC0710700A2589E /* AddCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddCardViewController.m; sourceTree = "<group>"; };
+		56E749CD1AC0710700A2589E /* CardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardsViewController.h; sourceTree = "<group>"; };
+		56E749CE1AC0710700A2589E /* CardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardsViewController.m; sourceTree = "<group>"; };
+		56E749D11AC0711300A2589E /* BCBeacon+Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BCBeacon+Card.h"; sourceTree = "<group>"; };
+		56E749D21AC0711300A2589E /* BCBeacon+Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BCBeacon+Card.m"; sourceTree = "<group>"; };
+		56E749D31AC0711300A2589E /* Card+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Card+Additions.h"; sourceTree = "<group>"; };
+		56E749D41AC0711300A2589E /* Card+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Card+Additions.m"; sourceTree = "<group>"; };
+		56E749D51AC0711300A2589E /* Merchant+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Merchant+Additions.h"; sourceTree = "<group>"; };
+		56E749D61AC0711300A2589E /* Merchant+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Merchant+Additions.m"; sourceTree = "<group>"; };
+		56E749D71AC0711300A2589E /* NSManagedObject+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Additions.h"; sourceTree = "<group>"; };
+		56E749D81AC0711300A2589E /* NSManagedObject+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Additions.m"; sourceTree = "<group>"; };
+		56E749D91AC0711300A2589E /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Additions.h"; sourceTree = "<group>"; };
+		56E749DA1AC0711300A2589E /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Additions.m"; sourceTree = "<group>"; };
+		56E749DB1AC0711300A2589E /* UIColor+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Additions.h"; sourceTree = "<group>"; };
+		56E749DC1AC0711300A2589E /* UIColor+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Additions.m"; sourceTree = "<group>"; };
+		8FB5ACD00D0D8C3808D073B5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		A46D4F87D8AC6054DD2534E4 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDBF66E773D13BC37548156A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		56E749701AC0692D00A2589E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C0301ABD3321C1E0127F929 /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3D27E98DE364BB6C88A0DD45 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A46D4F87D8AC6054DD2534E4 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		56E7496A1AC0692D00A2589E = {
+			isa = PBXGroup;
+			children = (
+				56E749751AC0692D00A2589E /* BCWallet */,
+				56E749741AC0692D00A2589E /* Products */,
+				E5CB70FCF95E623C778C3A3C /* Pods */,
+				3D27E98DE364BB6C88A0DD45 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		56E749741AC0692D00A2589E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				56E749731AC0692D00A2589E /* BCWallet.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		56E749751AC0692D00A2589E /* BCWallet */ = {
+			isa = PBXGroup;
+			children = (
+				56E749B31AC070A200A2589E /* Views */,
+				56E749B21AC0709500A2589E /* Utilities */,
+				56E749B11AC0708E00A2589E /* Models */,
+				56E749B01AC0708700A2589E /* Images */,
+				56E749AF1AC0708000A2589E /* Controllers */,
+				56E749AE1AC0707800A2589E /* Categories */,
+				56E749A61AC06BD000A2589E /* AppDelegate.h */,
+				56E749A71AC06BD000A2589E /* AppDelegate.m */,
+				56E749A81AC06BD000A2589E /* BCWallet.xcdatamodel */,
+				56E749A91AC06BD000A2589E /* Constants.h */,
+				56E749AA1AC06BD000A2589E /* Constants.m */,
+				56E749A31AC06B9100A2589E /* Images.xcassets */,
+				56E7499F1AC06B6F00A2589E /* LaunchScreen.xib */,
+				56E749A01AC06B6F00A2589E /* Main.storyboard */,
+				56E749761AC0692D00A2589E /* Supporting Files */,
+			);
+			path = BCWallet;
+			sourceTree = "<group>";
+		};
+		56E749761AC0692D00A2589E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				56E749771AC0692D00A2589E /* Info.plist */,
+				56E749781AC0692D00A2589E /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		56E749AE1AC0707800A2589E /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				56E749D11AC0711300A2589E /* BCBeacon+Card.h */,
+				56E749D21AC0711300A2589E /* BCBeacon+Card.m */,
+				56E749D31AC0711300A2589E /* Card+Additions.h */,
+				56E749D41AC0711300A2589E /* Card+Additions.m */,
+				56E749D51AC0711300A2589E /* Merchant+Additions.h */,
+				56E749D61AC0711300A2589E /* Merchant+Additions.m */,
+				56E749D71AC0711300A2589E /* NSManagedObject+Additions.h */,
+				56E749D81AC0711300A2589E /* NSManagedObject+Additions.m */,
+				56E749D91AC0711300A2589E /* UIViewController+Additions.h */,
+				56E749DA1AC0711300A2589E /* UIViewController+Additions.m */,
+				56E749DB1AC0711300A2589E /* UIColor+Additions.h */,
+				56E749DC1AC0711300A2589E /* UIColor+Additions.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		56E749AF1AC0708000A2589E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				56E749CB1AC0710700A2589E /* AddCardViewController.h */,
+				56E749CC1AC0710700A2589E /* AddCardViewController.m */,
+				56E749CD1AC0710700A2589E /* CardsViewController.h */,
+				56E749CE1AC0710700A2589E /* CardsViewController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		56E749B01AC0708700A2589E /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				56E749C91AC070D600A2589E /* logo.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		56E749B11AC0708E00A2589E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				56E749C31AC070C600A2589E /* Card.h */,
+				56E749C41AC070C600A2589E /* Card.m */,
+				56E749C51AC070C600A2589E /* Merchant.h */,
+				56E749C61AC070C600A2589E /* Merchant.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		56E749B21AC0709500A2589E /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				56E749C01AC070BC00A2589E /* ComparisonUtilities.h */,
+				56E749C11AC070BC00A2589E /* ComparisonUtilities.m */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		56E749B31AC070A200A2589E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				56E749B41AC070B300A2589E /* BarcodeCell.h */,
+				56E749B51AC070B300A2589E /* BarcodeCell.m */,
+				56E749B61AC070B300A2589E /* CardCell.h */,
+				56E749B71AC070B300A2589E /* CardCell.m */,
+				56E749B81AC070B300A2589E /* MerchantCell.h */,
+				56E749B91AC070B300A2589E /* MerchantCell.m */,
+				56E749BA1AC070B300A2589E /* TransactionAlertView.h */,
+				56E749BB1AC070B300A2589E /* TransactionAlertView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		E5CB70FCF95E623C778C3A3C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BDBF66E773D13BC37548156A /* Pods.debug.xcconfig */,
+				8FB5ACD00D0D8C3808D073B5 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		56E749721AC0692D00A2589E /* BCWallet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56E749991AC0692E00A2589E /* Build configuration list for PBXNativeTarget "BCWallet" */;
+			buildPhases = (
+				4FE05B0E28ADE57C76168267 /* Check Pods Manifest.lock */,
+				56E7496F1AC0692D00A2589E /* Sources */,
+				56E749701AC0692D00A2589E /* Frameworks */,
+				56E749711AC0692D00A2589E /* Resources */,
+				208E8E43DA2E73F4C90DA781 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BCWallet;
+			productName = BCWallet;
+			productReference = 56E749731AC0692D00A2589E /* BCWallet.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		56E7496B1AC0692D00A2589E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = BlueCats;
+				TargetAttributes = {
+					56E749721AC0692D00A2589E = {
+						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = RPD85U68F7;
+					};
+				};
+			};
+			buildConfigurationList = 56E7496E1AC0692D00A2589E /* Build configuration list for PBXProject "BCWallet" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 56E7496A1AC0692D00A2589E;
+			productRefGroup = 56E749741AC0692D00A2589E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				56E749721AC0692D00A2589E /* BCWallet */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		56E749711AC0692D00A2589E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56E749CA1AC070D600A2589E /* logo.png in Resources */,
+				56E749A41AC06B9100A2589E /* Images.xcassets in Resources */,
+				56E749A11AC06B6F00A2589E /* LaunchScreen.xib in Resources */,
+				56E749A21AC06B6F00A2589E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		208E8E43DA2E73F4C90DA781 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4FE05B0E28ADE57C76168267 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		56E7496F1AC0692D00A2589E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56E749AD1AC06BD000A2589E /* Constants.m in Sources */,
+				56E749BF1AC070B300A2589E /* TransactionAlertView.m in Sources */,
+				56E749DE1AC0711300A2589E /* Card+Additions.m in Sources */,
+				56E749DF1AC0711300A2589E /* Merchant+Additions.m in Sources */,
+				56E749E21AC0711300A2589E /* UIColor+Additions.m in Sources */,
+				56E749E11AC0711300A2589E /* UIViewController+Additions.m in Sources */,
+				56E749C71AC070C600A2589E /* Card.m in Sources */,
+				56E749791AC0692D00A2589E /* main.m in Sources */,
+				56E749DD1AC0711300A2589E /* BCBeacon+Card.m in Sources */,
+				56E749BE1AC070B300A2589E /* MerchantCell.m in Sources */,
+				56E749D01AC0710700A2589E /* CardsViewController.m in Sources */,
+				56E749BD1AC070B300A2589E /* CardCell.m in Sources */,
+				56E749C21AC070BC00A2589E /* ComparisonUtilities.m in Sources */,
+				56E749E01AC0711300A2589E /* NSManagedObject+Additions.m in Sources */,
+				56E749C81AC070C600A2589E /* Merchant.m in Sources */,
+				56E749BC1AC070B300A2589E /* BarcodeCell.m in Sources */,
+				56E749CF1AC0710700A2589E /* AddCardViewController.m in Sources */,
+				56E749AC1AC06BD000A2589E /* BCWallet.xcdatamodel in Sources */,
+				56E749AB1AC06BD000A2589E /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		56E749971AC0692E00A2589E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		56E749981AC0692E00A2589E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		56E7499A1AC0692E00A2589E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BDBF66E773D13BC37548156A /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "$(SRCROOT)/BCWallet/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		56E7499B1AC0692E00A2589E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8FB5ACD00D0D8C3808D073B5 /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "$(SRCROOT)/BCWallet/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		56E7496E1AC0692D00A2589E /* Build configuration list for PBXProject "BCWallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56E749971AC0692E00A2589E /* Debug */,
+				56E749981AC0692E00A2589E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		56E749991AC0692E00A2589E /* Build configuration list for PBXNativeTarget "BCWallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56E7499A1AC0692E00A2589E /* Debug */,
+				56E7499B1AC0692E00A2589E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 56E7496B1AC0692D00A2589E /* Project object */;
+}

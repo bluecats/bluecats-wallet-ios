@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14B25" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Card" representedClassName="Card" syncable="YES">
+        <attribute name="barcode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="currentBalance" optional="YES" attributeType="Double" syncable="YES"/>
+        <attribute name="openingBalance" optional="YES" attributeType="Double" syncable="YES"/>
+        <relationship name="merchant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Merchant" inverseName="cards" inverseEntity="Merchant" syncable="YES"/>
+    </entity>
+    <entity name="Merchant" representedClassName="Merchant" syncable="YES">
+        <attribute name="backgroundHexColor" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="logoImageURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="merchantID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="textHexColor" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="cards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Card" inverseName="merchant" inverseEntity="Card" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Card" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="Merchant" positionX="0" positionY="0" width="128" height="135"/>
+    </elements>
+</model>
