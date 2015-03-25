@@ -26,7 +26,7 @@
     _merchant = merchant;
     
     self.nameLabel.text = merchant.name;
-    
+
     NSURL *logoURL = [NSURL URLWithString:merchant.logoImageURL];
     [self.logoImageView setImageWithURL:logoURL placeholderImage:nil];
 }

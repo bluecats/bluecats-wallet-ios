@@ -34,10 +34,8 @@
                 registerID = customValue.value;
             }
         }
-        
         self.registerIDCache = registerID;
     }
-    
     return self.registerIDCache;
 }
 

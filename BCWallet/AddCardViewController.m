@@ -84,15 +84,11 @@ const CGFloat kTableViewSectionFooterHeight = 0.0f;
     NSIndexPath *selectedIndexPath = [self.tableview indexPathForSelectedRow];
     if (selectedIndexPath)
     {
-        NSString *barcode = self.barcodeCell.barcodeField.text;
-        Merchant *selectedMerchant = [self.merchants objectAtIndex:selectedIndexPath.row];
-        
         Card *newCard = [Card createCardInContext:self.managedContext];
-        newCard.barcode = barcode;
-        newCard.merchant = selectedMerchant;
+        newCard.barcode = self.barcodeCell.barcodeField.text;
+        newCard.merchant = [self.merchants objectAtIndex:selectedIndexPath.row];
         
         [self saveContext];
-        
         [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -120,11 +116,9 @@ const CGFloat kTableViewSectionFooterHeight = 0.0f;
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != 1) {
-        return nil;
-    }
-    NSIndexPath *oldIndexPath = [tableView indexPathForSelectedRow];
+    if (indexPath.section != 1) return nil;
     
+    NSIndexPath *oldIndexPath = [tableView indexPathForSelectedRow];
     if (oldIndexPath) {
         MerchantCell *mercahntCellToUnSelect = (MerchantCell*)[tableView cellForRowAtIndexPath:oldIndexPath];
         mercahntCellToUnSelect.accessoryType = UITableViewCellAccessoryNone;
@@ -185,15 +179,17 @@ const CGFloat kTableViewSectionFooterHeight = 0.0f;
         MerchantCell *merchantCell = (MerchantCell *)cell;
         
         Merchant *merchant = [self.merchants objectAtIndex:indexPath.row];
-        merchantCell.nameLabel.textColor = [UIColor colorWithHexString:merchant.textHexColor];
+        UIColor *textColor = [UIColor colorWithHexString:merchant.textHexColor];
+        merchantCell.nameLabel.textColor = textColor;
         merchantCell.backgroundColor = [UIColor colorWithHexString:merchant.backgroundHexColor];
+        merchantCell.tintColor = textColor;
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *barcodeCellId = @"BarcodeCell";
-    static NSString *merchantCellId = @"MerchantCell";
+    static NSString *barcodeCellIdentifier = @"BarcodeCell";
+    static NSString *merchantCellIdentifier = @"MerchantCell";
     
     if (indexPath.section == 0)
     {
@@ -201,7 +197,7 @@ const CGFloat kTableViewSectionFooterHeight = 0.0f;
         
         if ([cellClass isSubclassOfClass:[BarcodeCell class]])
         {
-            BarcodeCell *cell = [tableView dequeueReusableCellWithIdentifier:barcodeCellId forIndexPath:indexPath];
+            BarcodeCell *cell = [tableView dequeueReusableCellWithIdentifier:barcodeCellIdentifier forIndexPath:indexPath];
             
             self.barcodeCell = cell;
             self.barcodeCell.barcodeField.delegate = self;
@@ -213,7 +209,7 @@ const CGFloat kTableViewSectionFooterHeight = 0.0f;
     }
     else
     {
-        MerchantCell *cell = [tableView dequeueReusableCellWithIdentifier:merchantCellId forIndexPath:indexPath];
+        MerchantCell *cell = [tableView dequeueReusableCellWithIdentifier:merchantCellIdentifier forIndexPath:indexPath];
         cell.merchant = [self.merchants objectAtIndex:indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryNone;
         return cell;

@@ -23,9 +23,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Use location always?</string>
+	<string>Used to find nearby registers that can redeem your cards.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Use location when in use?</string>
+	<string>Used to find nearby registers that can redeem your cards.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

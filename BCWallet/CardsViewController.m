@@ -20,8 +20,9 @@
 #import "UIViewController+Additions.h"
 #import "UIColor+Additions.h"
 #import "BCCustomValue.h"
+#import "ComparisonUtilities.h"
 
-NSString * const kTriggerIdentifierEnteredBeacon = @"TriggerIdentifierEnteredBeacon";
+NSString * const kTriggerIdentifierEnteredRegisterBeacon = @"kTriggerIdentifierEnteredRegisterBeacon";
 NSString * const kTriggerIdentifierRegisterInProximity = @"TriggerIdentifierRegisterInProximity";
 NSString * const kTriggerIdentifierTransactionInProximity = @"TriggerIdentifierTransactionInProximity";
 NSString * const kTriggerIdentifierEnteredMerchant = @"TriggerIdentifierEnteredMerchant";
@@ -32,8 +33,8 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
 
 @property (nonatomic) NSArray *cards;
 @property (nonatomic) BCEventManager * eventManager;
-@property (nonatomic) NSMutableDictionary *currentlyVisitingRegisterBeaconsWithSerial;
-@property (nonatomic) NSMutableDictionary *currentlyVisitingMerchantIDs;
+@property (nonatomic) NSMutableDictionary *nearbyRegisterBeaconForSerialNumber;
+@property (nonatomic) NSMutableDictionary *nearbyRegisterBeaconsForMerchantID;
 @property (nonatomic) NSNumberFormatter *numberFormatter;
 @property (nonatomic) BOOL didShowRegisterNearbyNotification;
 
@@ -58,8 +59,8 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     [self setupTransactionProximityFilter];
     [self setupNeverSeenMerchantFilter];
     
-    self.currentlyVisitingRegisterBeaconsWithSerial = [[NSMutableDictionary alloc] init];
-    self.currentlyVisitingMerchantIDs = [[NSMutableDictionary alloc] init];
+    self.nearbyRegisterBeaconForSerialNumber = [[NSMutableDictionary alloc] init];
+    self.nearbyRegisterBeaconsForMerchantID = [[NSMutableDictionary alloc] init];
     
     self.refreshControl = [[UIRefreshControl alloc] init];
     self.refreshControl.backgroundColor = [UIColor whiteColor];
@@ -81,7 +82,12 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
 {
     [super viewWillAppear:animated];
     
-    [self reloadTableViewData];
+    // hack to hide refresh control
+    CGPoint contentOffset = self.tableView.contentOffset;
+    contentOffset.y = 0.0f;
+    self.tableView.contentOffset = contentOffset;
+    
+    [self reloadCardsOnMainQueue];
 }
 
 - (void)setupNeverSeenMerchantFilter
@@ -100,7 +106,7 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     BCEventFilter *syncedFilter = (BCEventFilter *)[BCEventFilter filterByPredicate:pred];
     BCEventFilter *neverSeenFilter = (BCEventFilter *)[BCEventFilter filterByNeverEnteredBeacon];
     BCEventFilter *registerFilter = (BCEventFilter *)[BCEventFilter filterByCustomValuesWithKeys:@[WalletRegisterIDKey]];
-    BCTrigger* enteredNewBeacon = [[BCTrigger alloc] initWithIdentifier:kTriggerIdentifierEnteredBeacon
+    BCTrigger* enteredNewBeacon = [[BCTrigger alloc] initWithIdentifier:kTriggerIdentifierEnteredRegisterBeacon
                                                              andFilters:@[syncedFilter, registerFilter, neverSeenFilter]];
     enteredNewBeacon.repeatCount = NSIntegerMax;
     [self.eventManager monitorEventWithTrigger:enteredNewBeacon];
@@ -153,7 +159,7 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     }
 }
 
-- (void)updateLocalStoreFromRegisterBeacon:(BCBeacon *)beacon
+- (void)updateLocalStoreWithRegisterBeacon:(BCBeacon *)beacon
 {
     for (NSDictionary *merchantInfo in [beacon merchantInfos])
     {
@@ -179,11 +185,10 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     }
 }
 
-- (NSDictionary *)findFirstMerchantInfoInArray:(NSArray *)merchantInfos withMerchantID:(NSString *)merchantIDToFind
+- (NSDictionary *)firstMerchantInfoInArray:(NSArray *)merchantInfos withMerchantID:(NSString *)merchantID
 {
     for (NSDictionary *merchantInfo in merchantInfos) {
-        NSString *merchantID = [merchantInfo objectForKey:WalletMerchantIDKey];
-        if ([merchantIDToFind isEqualToString:merchantID]) {
+        if ([merchantID isEqualToString:[merchantInfo objectForKey:WalletMerchantIDKey]]) {
             return merchantInfo;
         }
     }
@@ -202,45 +207,61 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     return NSNotFound;
 }
 
-- (void)requestCurrentBalances
+- (BCBeacon *)closestRegisterBeacon
 {
-    NSArray *registerBeacons = self.currentlyVisitingRegisterBeaconsWithSerial.allValues;
+    NSArray *registerBeacons = self.nearbyRegisterBeaconForSerialNumber.allValues;
     
-    BCBeacon *closestRegisterBeacon = [[registerBeacons sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-                                           BCBeacon *b1 = (BCBeacon *)obj1;
-                                           BCBeacon *b2 = (BCBeacon *)obj2;
-                                           
-                                           return [b1.rssi compare:b2.rssi];
-                                           
-                                       }] lastObject];
-    
-    if (!closestRegisterBeacon) {
+    return [[registerBeacons sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        BCBeacon *b1 = (BCBeacon *)obj1;
+        BCBeacon *b2 = (BCBeacon *)obj2;
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.refreshControl endRefreshing];
-        });
+        return [b1.rssi compare:b2.rssi];
         
-        return;
-    }
+    }] lastObject];
+}
+
+- (NSArray *)cardsForRegisterBeacon:(BCBeacon *)registerBeacon
+{
+    NSMutableArray *cardsForRegisterBeacon = [NSMutableArray array];
     
-    NSMutableArray *cardsForClosestRegister = [NSMutableArray array];
-    
-    NSArray *merchantInfosForRegister = [closestRegisterBeacon merchantInfos];
-    if (merchantInfosForRegister && merchantInfosForRegister.count > 0) {
+    NSArray *merchantInfos = [registerBeacon merchantInfos];
+    if (merchantInfos && merchantInfos.count > 0) {
         
         for (Card *card in self.cards) {
             
-            NSDictionary *merchantInfo = [self findFirstMerchantInfoInArray:merchantInfosForRegister
-                                                             withMerchantID:card.merchant.merchantID];
+            NSDictionary *merchantInfo = [self firstMerchantInfoInArray:merchantInfos
+                                                         withMerchantID:card.merchant.merchantID];
             if (merchantInfo) {
-                NSLog(@"Requesting balance for card %@ from merchant %@", card.barcode, card.merchant.name);
-                [cardsForClosestRegister addObject:card];
+                [cardsForRegisterBeacon addObject:card];
             }
         }
     }
+    return cardsForRegisterBeacon;
+}
+
+- (void)endRefreshingOnMainQueue
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.refreshControl endRefreshing];
+    });
+}
+
+- (void)requestCurrentBalances
+{
+    BCBeacon *closestRegisterBeacon = [self closestRegisterBeacon];
+    if (!closestRegisterBeacon) {
+        [self endRefreshingOnMainQueue];
+        return;
+    }
+    
+    NSArray *cardsForClosestRegisterBeacon = [self cardsForRegisterBeacon:closestRegisterBeacon];
+    if (!cardsForClosestRegisterBeacon || cardsForClosestRegisterBeacon.count <= 0) {
+        [self endRefreshingOnMainQueue];
+        return;
+    }
     
     NSMutableArray *requestDataArray = [NSMutableArray array];
-    for (Card *card in cardsForClosestRegister) {
+    for (Card *card in cardsForClosestRegisterBeacon) {
         
         NSData *requestData = [NSJSONSerialization dataWithJSONObject:@{WalletDataTypeTinyKey: [NSString stringWithFormat:@"%@", @(WalletDataTypeCardBalanceRequest)], WalletCardBarcodeTinyKey: card.barcode, WalletMerchantIDTinyKey: card.merchant.merchantID} options:0 error:nil];
         [requestDataArray addObject:requestData];
@@ -256,7 +277,7 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
                 NSString *barcode = [responseInfo objectForKey:WalletCardBarcodeTinyKey];
                 NSString *merchantID = [responseInfo objectForKey:WalletMerchantIDTinyKey];
                 
-                NSInteger indexOfCard = [self indexOfCardWithBarcode:barcode andMerchantID:merchantID];
+                NSUInteger indexOfCard = [self indexOfCardWithBarcode:barcode andMerchantID:merchantID];
                 Card *card = [self.cards objectAtIndex:indexOfCard];
                 
                 NSArray *errorCodes = [responseInfo objectForKey:WalletErrorsTinyKey];
@@ -270,10 +291,9 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
                 }
                 else if (errorCodes.count > 0)
                 {
-                    NSMutableString *message = [[NSString stringWithFormat:@"Unable to get balance for card with barcode %@ from %@'s register %@ due to the following errors:", barcode, card.merchant.name, closestRegisterBeacon.registerID] mutableCopy];
+                    NSMutableString *message = [[NSString stringWithFormat:@"Unable to get balance for your %@ card with barcode %@ due to the following errors:", card.merchant.name, barcode] mutableCopy];
                     
-                    for (NSNumber *errorCode in errorCodes)
-                    {
+                    for (NSNumber *errorCode in errorCodes) {
                         NSString *errorString = [self descriptionForWalletError:(WalletError)[errorCode integerValue]];
                         [message appendFormat:@" %@", errorString];
                     }
@@ -293,12 +313,11 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
         }
         
         [self saveContext];
-        
-        [self reloadTableViewData];
+        [self reloadCardsOnMainQueue];
         
     } status:^(NSString *status) {
         
-        NSLog(@"Balance request status %@", status);
+        NSLog(@"Card balance request status: %@", status);
         
     } failure:^(NSError *error) {
         
@@ -319,7 +338,7 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     }];
 }
 
-- (void)reloadTableViewData
+- (void)reloadCardsOnMainQueue
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -335,8 +354,11 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
             NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName: [UIFont fontWithName:@"Avenir-Light" size:12.0f], NSForegroundColorAttributeName: [UIColor blackColor]}];
             self.refreshControl.attributedTitle = attributedTitle;
             
-            [self.refreshControl endRefreshing];
+            if (self.refreshControl.isRefreshing) {
+                [self.refreshControl endRefreshing];
+            }
         }
+
     });
 }
 
@@ -353,97 +375,75 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
 
 - (void)eventManager:(BCEventManager *)eventManager triggeredEvent:(BCTriggeredEvent *)triggeredEvent
 {
-    if ([triggeredEvent.event.eventIdentifier isEqualToString:kTriggerIdentifierEnteredBeacon]) {
+    if ([triggeredEvent.event.eventIdentifier isEqualToString:kTriggerIdentifierEnteredRegisterBeacon]) {
         
         for (BCBeacon *registerBeacon in triggeredEvent.filteredMicroLocation.beacons) {
-            
             NSLog(@"entered register beacon %@", registerBeacon.serialNumber);
-            [self updateLocalStoreFromRegisterBeacon:registerBeacon];
+            [self updateLocalStoreWithRegisterBeacon:registerBeacon];
         }
         
         [self saveContext];
-        [self reloadTableViewData];
+        [self reloadCardsOnMainQueue];
     }
     else if ([triggeredEvent.event.eventIdentifier isEqualToString:kTriggerIdentifierRegisterInProximity])
     {
-        BOOL needsTableViewReload = NO;
+        BOOL needsToReloadCards = NO;
         for (BCBeacon *registerBeacon in triggeredEvent.filteredMicroLocation.beacons) {
             
-            if (![self.currentlyVisitingRegisterBeaconsWithSerial objectForKey:registerBeacon.serialNumber]) {
+            if (![self.nearbyRegisterBeaconForSerialNumber objectForKey:registerBeacon.serialNumber]) {
                 
-                for (NSDictionary *merchInfo in [registerBeacon merchantInfos]) {
+                NSArray *merchantInfos = [registerBeacon merchantInfos];
+                for (NSDictionary *merchantInfo in merchantInfos) {
                     
-                    NSString *merchantID = [merchInfo objectForKey:WalletMerchantIDKey];
-                    if (merchantID) {
+                    NSString *merchantID = [merchantInfo objectForKey:WalletMerchantIDKey];
+                    if (merchantID.length > 0) {
                         
-                        NSMutableArray *availableRegistersWithMerchID = [self.currentlyVisitingMerchantIDs objectForKey:merchantID];
-                        if (!availableRegistersWithMerchID) {
-                            NSMutableArray *availableRegister = [NSMutableArray arrayWithObject:registerBeacon];
-                            [self.currentlyVisitingMerchantIDs setObject:availableRegister forKey:merchantID];
+                        NSMutableArray *nearbyRegisterBeacons = [self.nearbyRegisterBeaconsForMerchantID objectForKey:merchantID];
+                        if (!nearbyRegisterBeacons) {
+                            nearbyRegisterBeacons = [NSMutableArray arrayWithObject:registerBeacon];
+                            [self.nearbyRegisterBeaconsForMerchantID setObject:nearbyRegisterBeacons forKey:merchantID];
                         }
                         else {
-                            [availableRegistersWithMerchID addObject:registerBeacon];
+                            [nearbyRegisterBeacons addObject:registerBeacon];
                         }
                     }
                 }
                 
+                NSLog(@"near register beacon %@ with merchants %@", registerBeacon.serialNumber, [merchantInfos valueForKey:WalletMerchantNameKey]);
+                
                 @synchronized(self) {
-                    
-                    NSLog(@"nearby register beacon %@", registerBeacon.serialNumber);
-                    [self.currentlyVisitingRegisterBeaconsWithSerial setObject:registerBeacon forKey:registerBeacon.serialNumber];
-                    
-                    needsTableViewReload = YES;
-                    NSLog(@"nearby merchants %@", self.currentlyVisitingMerchantIDs);
+                    [self.nearbyRegisterBeaconForSerialNumber setObject:registerBeacon forKey:registerBeacon.serialNumber];
                 }
+                
+                needsToReloadCards = YES;
             }
         }
         
-        if (needsTableViewReload) [self reloadTableViewData];
+        if (needsToReloadCards) [self reloadCardsOnMainQueue];
     }
     else if ([triggeredEvent.event.eventIdentifier isEqualToString:kTriggerIdentifierTransactionInProximity]) {
         
-        NSLog(@"THERE IS A TRANSACTION IN PROX");
         for (BCBeacon *registerBeacon in triggeredEvent.filteredMicroLocation.beacons) {
             
-            NSArray *blockDataArray = [registerBeacon reassembledBlockDataWithDataType:BCBlockDataTypeCustom];
-            NSDictionary *lastDataInfo = [blockDataArray lastObject];
-            NSData *data = [lastDataInfo objectForKey:BCBlueCatsBlockDataKey];
-            NSError *jsonError;
-            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+            NSArray *reassembledBlockDataArray = [registerBeacon reassembledBlockDataWithDataType:BCBlockDataTypeCustom];
+            NSDictionary *lastReassembledBlockData = [reassembledBlockDataArray lastObject];
+            NSData *data = [lastReassembledBlockData objectForKey:BCBlueCatsBlockDataKey];
             
-            if (json && !jsonError) {
+            NSError *error;
+            NSMutableDictionary *transactionInfo = [[NSJSONSerialization JSONObjectWithData:data options:0 error:&error] mutableCopy];
+            if (!error && transactionInfo) {
                 
-                NSString *merchantID = [json objectForKey:WalletMerchantIDTinyKey];
-                int index = 0;
-                int cardIndex = 0;
-                double lowestCurrentBalance = NSIntegerMax;
+                NSString *merchantID = [transactionInfo objectForKey:WalletMerchantIDTinyKey];
                 
-                for (Card *card in self.cards) {
-                    
-                    if ([card.merchant.merchantID isEqualToString:merchantID]) {
-                        
-                        if ([card.currentBalance doubleValue] < lowestCurrentBalance &&
-                            ([card.currentBalance doubleValue] > 0)) {
-                            
-                            cardIndex = index;
-                            lowestCurrentBalance = [card.currentBalance doubleValue];
-                        }
-                    }
-                    index++;
-                }
-                
-                if (lowestCurrentBalance != NSIntegerMax) {
-                    
-                    NSMutableDictionary *transactionInfo = [@{
-                                                           kTransactionRegisterBeaconKey: registerBeacon,
-                                                           kTransactionCardIndexKey: @(cardIndex)
-                                                           } mutableCopy];
-                    
-                    [transactionInfo addEntriesFromDictionary:json];
+                Card *card = [self cardWithLowestBalanceForMerchant:merchantID];
+                if (card) {
+                    NSUInteger cardIndex = [self indexOfCardWithBarcode:card.barcode andMerchantID:merchantID];
+                    [transactionInfo setObject:registerBeacon forKey:kTransactionRegisterBeaconKey];
+                    [transactionInfo setObject:@(cardIndex) forKey:kTransactionCardIndexKey];
                     [self showCardRedmeptionViewForTransactionRequest:transactionInfo];
                 }
                 else {
-                    NSLog(@"No cards with a balance found.");
+                    NSLog(@"Card with a balance not found for merchant %@.", merchantID);
                 }
             }
         }
@@ -473,6 +473,30 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
             [self scheduleLocalNotificationWithMessage:message];
             self.didShowRegisterNearbyNotification = YES;
         }
+    }
+}
+
+- (Card *)cardWithLowestBalanceForMerchant:(NSString *)merchantID
+{
+    double lowestBalance = DBL_MAX;
+    NSUInteger indexOfCardWithLowestBalance = NSNotFound;
+    
+    NSUInteger index = 0;
+    for (Card *card in self.cards) {
+        if ([card.merchant.merchantID isEqualToString:merchantID]) {
+            if (card.currentBalance &&
+                [ComparisonUtilities isOneDouble:[card.currentBalance doubleValue] lessThanAnotherDouble:lowestBalance]) {
+                indexOfCardWithLowestBalance = index;
+            }
+        }
+        index++;
+    }
+    
+    if (indexOfCardWithLowestBalance != NSNotFound) {
+        return [self.cards objectAtIndex:indexOfCardWithLowestBalance];
+    }
+    else {
+        return nil;
     }
 }
 
@@ -528,11 +552,10 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
 
 - (void) microLocationManager:(BCMicroLocationManager *)microLocationManager didEndVisitForBeaconsWithSerialNumbers:(NSArray *)serialNumbers
 {
-    BOOL needsTableViewReload = NO;
-    
+    BOOL needsToReloadCards = NO;
     for (NSString *serialNumber in serialNumbers) {
         
-        BCBeacon *registerBeacon = [self.currentlyVisitingRegisterBeaconsWithSerial objectForKey:serialNumber];
+        BCBeacon *registerBeacon = [self.nearbyRegisterBeaconForSerialNumber objectForKey:serialNumber];
         if (registerBeacon) {
             
             for (NSDictionary *merchantInfo in [registerBeacon merchantInfos])
@@ -540,9 +563,9 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
                 NSString *merchantID = [merchantInfo objectForKey:WalletMerchantIDKey];
                 if (merchantID) {
                     
-                    NSMutableArray *availableRegistersWithMerchID = [self.currentlyVisitingMerchantIDs objectForKey:merchantID];
+                    NSMutableArray *availableRegistersWithMerchID = [self.nearbyRegisterBeaconsForMerchantID objectForKey:merchantID];
                     if (availableRegistersWithMerchID && (availableRegistersWithMerchID.count < 2)) {
-                        [self.currentlyVisitingMerchantIDs removeObjectForKey:merchantID];
+                        [self.nearbyRegisterBeaconsForMerchantID removeObjectForKey:merchantID];
                     }
                     else if (availableRegistersWithMerchID) {
                         [availableRegistersWithMerchID removeObject:registerBeacon];
@@ -550,16 +573,17 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
                 }
             }
             
-            @synchronized(self)
-            {
-                [self.currentlyVisitingRegisterBeaconsWithSerial removeObjectForKey:serialNumber];
-                needsTableViewReload = YES;
-                NSLog(@"currently visiting merch ids with registers %@", self.currentlyVisitingMerchantIDs);
+            NSLog(@"exited register beacon %@", registerBeacon.serialNumber);
+            
+            @synchronized(self) {
+                [self.nearbyRegisterBeaconForSerialNumber removeObjectForKey:serialNumber];
             }
+            
+            needsToReloadCards = YES;
         }
     }
     
-    if (needsTableViewReload) [self.tableView reloadData];
+    if (needsToReloadCards) [self.tableView reloadData];
 }
 
 - (void)showCardRedmeptionViewForTransactionRequest:(NSDictionary *)request
@@ -649,8 +673,7 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
              if (!errorCodes || (errorCodes.count == 0))
              {
                  NSString *currentBalanceString = [responseInfo objectForKey:WalletCardCurrentBalanceTinyKey];
-                 NSNumber *currentBalance = [self.numberFormatter numberFromString:currentBalanceString];
-                 card.currentBalance = currentBalance;
+                 card.currentBalance = [self.numberFormatter numberFromString:currentBalanceString];
                  
                  dispatch_async(dispatch_get_main_queue(), ^{
                      
@@ -660,14 +683,12 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
              }
              else if (errorCodes.count > 0)
              {
-                 NSMutableString *mutableErrorString = [@"Transaction failed with errors:" mutableCopy];
+                 NSMutableString *mutableErrorString = [@"Unable to redeem card due to the following errors:" mutableCopy];
                  for (NSNumber *errorCode in errorCodes) {
-                     
-                     NSString *errorString = [self descriptionForWalletError:(WalletError)[errorCode integerValue]];
-                     [mutableErrorString appendFormat:@" %@", errorString];
+                     [mutableErrorString appendFormat:@" %@", [self descriptionForWalletError:(WalletError)[errorCode integerValue]]];
                  }
                  
-                 NSString *title = [NSString stringWithFormat:@"Could Not Complete Transaction For %@", registerBeacon.serialNumber];
+                 NSString *title = @"Card Redemption Failed";
                  UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
                                                                      message:mutableErrorString
                                                                     delegate:nil
@@ -686,13 +707,19 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
          
      } status:^(NSString *status)
      {
-         NSLog(@"status %@", status);
+         NSLog(@"Card redemption request status %@", status);
          
      } failure:^(NSError *error) {
          
-         NSLog(@"failure !! !! %@", error);
-         NSString *title = [NSString stringWithFormat:@"USB Beacon Connection Failed For %@", registerBeacon.serialNumber];
-         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+         NSLog(@"Card redemption request failed with error %@", error);
+         
+         NSString *message = [NSString stringWithFormat:@"Unable to redeem card with register %@.", registerBeacon.registerID];
+         NSString *title = @"Card Redemption Failed";
+         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                             message:message
+                                                            delegate:nil
+                                                   cancelButtonTitle:@"OK"
+                                                   otherButtonTitles:nil];
          
          dispatch_async(dispatch_get_main_queue(), ^{
              [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];

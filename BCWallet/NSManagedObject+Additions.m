@@ -17,11 +17,15 @@
 
 + (NSEntityDescription *)entityInManagedObjectContext:(NSManagedObjectContext *)context
 {
+    if (!context) return nil;
+    
     return [NSEntityDescription entityForName:self.entityName inManagedObjectContext:context];
 }
 
 + (NSManagedObject *)firstInManagedObjectContext:(NSManagedObjectContext *)context
 {
+    if (!context) return nil;
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[self entityInManagedObjectContext:context]];
     [fetchRequest setFetchLimit:1];
@@ -43,6 +47,8 @@
 + (NSArray *)entitiesInManagedObjectContext:(NSManagedObjectContext *)context
                               withPredicate:(NSPredicate *)predicate
 {
+    if (!context) return [NSArray array];
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[self entityInManagedObjectContext:context]];
     
@@ -64,6 +70,8 @@
 + (NSArray *)entitiesInManagedObjectContext:(NSManagedObjectContext *)context
                               withPredicate:(NSPredicate *)predicate sortDescriptors:(NSArray *)sortDescriptors andPrefetches:(NSArray *)prefetchKeyArray limit:(NSUInteger)limit
 {
+    if (!context) return nil;
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[self entityInManagedObjectContext:context]];
     
@@ -89,6 +97,8 @@
 + (id)entityInManagedObjectContext:(NSManagedObjectContext *)context
                      withPredicate:(NSPredicate *)predicate
 {
+    if (!context) return nil;
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[self entityInManagedObjectContext:context]];
     [fetchRequest setFetchLimit:1];
@@ -110,12 +120,16 @@
 
 + (NSUInteger)countInManagedObjectContext:(NSManagedObjectContext *)context
 {
+    if (!context) return NSNotFound;
+    
     return [self countInManagedObjectContext:context withPredicate:nil];
 }
 
 + (NSUInteger)countInManagedObjectContext:(NSManagedObjectContext *)context
                             withPredicate:(NSPredicate *)predicate
 {
+    if (!context) return NSNotFound;
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[self entityInManagedObjectContext:context]];
     [fetchRequest setIncludesSubentities:NO];
@@ -137,6 +151,8 @@
 
 + (NSArray *)destroyAllInManagedContext:(NSManagedObjectContext *)context
 {
+    if (!context) return [NSArray array];
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[self entityInManagedObjectContext:context]];
     

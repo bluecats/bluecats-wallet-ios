@@ -21,30 +21,48 @@
     
     [[UINavigationBar appearance] setTitleTextAttributes: @{NSFontAttributeName: [UIFont fontWithName:@"Avenir-Medium" size:18.0f]}];
     
-    UINavigationController *vc = (UINavigationController *)self.window.rootViewController;
-    CardsViewController *gcvc = (CardsViewController *)vc.viewControllers[0];
-    gcvc.managedContext = self.managedObjectContext;
-    
-    [BlueCatsSDK setOptions:@{BCOptionUseLocalStorage:@(YES), BCOptionCrowdSourceBeaconUpdates:@(NO)}];
-    
-    [BlueCatsSDK startPurringWithAppToken:@"29bdb9c1-c3c1-4981-b4e1-d75cc2d13823"
-                               completion:^(BCStatus status)
-     {
-         if ((status == kBCStatusPurringWithErrors) && (![BlueCatsSDK isLocationAuthorized])) {
-             [BlueCatsSDK requestAlwaysLocationAuthorization];
-         }
-     }];
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if (![userDefaults objectForKey:WalletUserIdDefaultsKey])
-    {
-        NSString *uuidString = [[NSUUID UUID] UUIDString];
-        NSString *deviceUUID = [uuidString substringToIndex:4];
-        [userDefaults setObject:deviceUUID forKey:WalletUserIdDefaultsKey];
+    NSString *appToken = nil;
+    NSString *appTokenPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"appTokenPreference"];
+    if (appTokenPreference.length > 0) {
+        NSUUID *appTokenUUID = [[NSUUID alloc] initWithUUIDString:appTokenPreference];
+        if (appTokenUUID ) {
+            appToken = appTokenUUID.UUIDString;
+        }
     }
     
-    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
-        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeSound categories:nil]];
+    if (appToken.length <= 0) {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! AppToken Missing or Invalid" message:@"Close app and set appToken in BC Wallet settings. You can copy an appToken to the clipboard in BC Reveal." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+        [alert show];
+    }
+    else {
+        
+        UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+        CardsViewController *cardsViewController = (CardsViewController *)navigationController.viewControllers[0];
+        cardsViewController.managedContext = self.managedObjectContext;
+
+        [BlueCatsSDK setOptions:@{BCOptionUseLocalStorage:@(YES),
+                                  BCOptionCrowdSourceBeaconUpdates:@(NO)}];
+        
+        [BlueCatsSDK startPurringWithAppToken:appToken
+                                   completion:^(BCStatus status)
+         {
+             if ((status == kBCStatusPurringWithErrors) && (![BlueCatsSDK isLocationAuthorized])) {
+                 [BlueCatsSDK requestAlwaysLocationAuthorization];
+             }
+         }];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        if (![userDefaults objectForKey:WalletUserIdDefaultsKey])
+        {
+            NSString *uuidString = [[NSUUID UUID] UUIDString];
+            NSString *deviceUUID = [uuidString substringToIndex:4];
+            [userDefaults setObject:deviceUUID forKey:WalletUserIdDefaultsKey];
+        }
+        
+        if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
+            [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeSound categories:nil]];
+        }
     }
     
     return YES;
