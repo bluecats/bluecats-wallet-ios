@@ -15,4 +15,4 @@ If the mobile has more than one gift card for the merchant, the one with the low
 
 The transaction can be paid by multiple gift cards and devices. 
 
-The entry field will be prepopulated with the remaining amount of the transaction or the current balance of the gift card. To use this amount press **Yes** or enter a custom amount.  This will send a Gift Card Redemption Request.
+The entry field will be prepopulated with the remaining amount of the transaction or the current balance of the gift card. To use this amount press **Yes** or enter a custom amount.  This will send a Gift Card Redemption Response.
