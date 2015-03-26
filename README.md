@@ -11,7 +11,7 @@ Open BC Wallet for iOS and press the plus sign in the top right hand corner to a
 Pull down on the mobile card list to request card balances to the USB beacon over a single BLE connection.  This will update the current balances for your cards.
 
 ####Card Redemption Requests
-When Card Redemption Requests are received within the appropriate proximity, BC Wallet for iOS will prompt for an amount to be applied to the purchase.
+When card redemption requests are received within the appropriate proximity, BC Wallet for iOS will prompt for an amount to be applied to the purchase.
 
 If the mobile has more than one gift card for the merchant, the one with the lowest balance will be redeemed first. If a gift card with a balance less than the remaining amount of the transaction is redeemed, then it will be re-tendered.
 
