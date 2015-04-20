@@ -7,7 +7,7 @@
 //
 
 #import "MerchantCell.h"
-#import "UIImageView+BCAFNetworking.h"
+#import "UIImageView+AFNetworking.h"
 
 @implementation MerchantCell
 

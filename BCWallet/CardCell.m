@@ -7,7 +7,7 @@
 //
 
 #import "CardCell.h"
-#import "UIImageView+BCAFNetworking.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface CardCell ()
 
