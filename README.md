@@ -2,7 +2,9 @@
 
 BlueCats Wallet uses your location to show you nearby registers that redeem your loyalty and gift cards.
 
-BlueCats Wallet for iOS works in tandem with the OS X app of the same name.  Please find it [here](https://github.com/bluecats/bluecats-wallet-osx).
+BlueCats Wallet for iOS works with BC Wallet for [OS X](https://github.com/bluecats/bluecats-wallet-osx), [CSharp](https://github.com/bluecats/bluecats-wallet-csharp), and [BCLib-CSharp](https://github.com/bluecats/bclib-csharp).  
+
+[PDF Guide](https://drive.google.com/file/d/0BxJOlyJ2qnYqX3dGbklhOHdKb0E/view?usp=sharing) to using BC Wallet for iOS with BC Wallet for OS X.
 
 ####Entering a Gift Card
 Open BC Wallet for iOS and press the plus sign in the top right hand corner to add a gift card.  Select the merchant and enter the respective barcode for that card. Then press **Save**.
