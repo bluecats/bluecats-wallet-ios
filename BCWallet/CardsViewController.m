@@ -82,10 +82,11 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
 {
     [super viewWillAppear:animated];
     
-    // hack to hide refresh control
-    CGPoint contentOffset = self.tableView.contentOffset;
-    contentOffset.y = 0.0f;
-    self.tableView.contentOffset = contentOffset;
+    if (!self.refreshControl.isRefreshing) {
+        CGPoint contentOffset = self.tableView.contentOffset; // hack to hide refresh control
+        contentOffset.y = 0.0f;
+        self.tableView.contentOffset = contentOffset;
+    }
     
     [self reloadCardsOnMainQueue];
 }
@@ -485,7 +486,8 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     for (Card *card in self.cards) {
         if ([card.merchant.merchantID isEqualToString:merchantID]) {
             if (card.currentBalance &&
-                [ComparisonUtilities isOneDouble:[card.currentBalance doubleValue] lessThanAnotherDouble:lowestBalance]) {
+                [ComparisonUtilities isOneDouble:[card.currentBalance doubleValue] lessThanAnotherDouble:lowestBalance] &&
+                [ComparisonUtilities isOneDouble:[card.currentBalance doubleValue] greaterThanAnotherDouble:0.0f]) {
                 indexOfCardWithLowestBalance = index;
             }
         }
