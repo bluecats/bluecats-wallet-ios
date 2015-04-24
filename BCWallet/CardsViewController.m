@@ -82,13 +82,33 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
 {
     [super viewWillAppear:animated];
     
-    if (!self.refreshControl.isRefreshing) {
-        CGPoint contentOffset = self.tableView.contentOffset; // hack to hide refresh control
-        contentOffset.y = 0.0f;
-        self.tableView.contentOffset = contentOffset;
+    if ([self checkAndWarnForAppToken]) {
+        
+        if (!self.refreshControl.isRefreshing) {
+            CGPoint contentOffset = self.tableView.contentOffset; // hack to hide refresh control
+            contentOffset.y = 0.0f;
+            self.tableView.contentOffset = contentOffset;
+        }
+        [self reloadCardsOnMainQueue];
     }
     
-    [self reloadCardsOnMainQueue];
+}
+
+- (BOOL)checkAndWarnForAppToken
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    if (appDelegate.appToken.length <= 0)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! AppToken Missing or Invalid" message:@"Input the app token in the settings tab. You can copy an appToken to the clipboard in BC Reveal." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        
+        return NO;
+    }
+    else
+    {
+        return YES;
+    }
 }
 
 - (void)setupNeverSeenMerchantFilter

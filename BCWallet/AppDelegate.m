@@ -17,55 +17,75 @@
 
 @implementation AppDelegate
 
+NSString * const BCAppTokenPreferenceKey = @"BCAppTokenPreferenceKey";
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [[UINavigationBar appearance] setTitleTextAttributes: @{NSFontAttributeName: [UIFont fontWithName:@"Avenir-Medium" size:18.0f]}];
     
-    NSString *appToken = nil;
-    NSString *appTokenPreference = [[NSUserDefaults standardUserDefaults] stringForKey:@"appTokenPreference"];
+    NSString *appTokenPreference = [[NSUserDefaults standardUserDefaults] stringForKey:BCAppTokenPreferenceKey];
     if (appTokenPreference.length > 0) {
         NSUUID *appTokenUUID = [[NSUUID alloc] initWithUUIDString:appTokenPreference];
         if (appTokenUUID ) {
-            appToken = appTokenUUID.UUIDString;
+            _appToken = appTokenUUID.UUIDString;
         }
     }
     
-    if (appToken.length <= 0) {
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! AppToken Missing or Invalid" message:@"Close app and set appToken in BC Wallet settings. You can copy an appToken to the clipboard in BC Reveal." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-        [alert show];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (![userDefaults objectForKey:WalletUserIdDefaultsKey])
+    {
+        NSString *uuidString = [[NSUUID UUID] UUIDString];
+        NSString *deviceUUID = [uuidString substringToIndex:4];
+        [userDefaults setObject:deviceUUID forKey:WalletUserIdDefaultsKey];
     }
-    else {
-        
-        UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-        CardsViewController *cardsViewController = (CardsViewController *)navigationController.viewControllers[0];
-        cardsViewController.managedContext = self.managedObjectContext;
-
-        [BlueCatsSDK setOptions:@{BCOptionUseLocalStorage:@(YES),
-                                  BCOptionCrowdSourceBeaconUpdates:@(NO)}];
-        
-        [BlueCatsSDK startPurringWithAppToken:appToken
-                                   completion:^(BCStatus status)
-         {
-             if ((status == kBCStatusPurringWithErrors) && (![BlueCatsSDK isLocationAuthorized])) {
-                 [BlueCatsSDK requestAlwaysLocationAuthorization];
-             }
-         }];
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        if (![userDefaults objectForKey:WalletUserIdDefaultsKey])
-        {
-            NSString *uuidString = [[NSUUID UUID] UUIDString];
-            NSString *deviceUUID = [uuidString substringToIndex:4];
-            [userDefaults setObject:deviceUUID forKey:WalletUserIdDefaultsKey];
-        }
-        
-        if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
-            [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeSound categories:nil]];
-        }
+    
+    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeSound categories:nil]];
+    }
+    
+    UITabBarController *rootTabBarController = (UITabBarController *)self.window.rootViewController;
+    UINavigationController *navigationController = (UINavigationController *)rootTabBarController.viewControllers[0];
+    CardsViewController *cardsViewController = (CardsViewController *)navigationController.viewControllers[0];
+    cardsViewController.managedContext = self.managedObjectContext;
+    
+    if (self.appToken.length <= 0)
+    {
+        rootTabBarController.selectedIndex = 1;
+    }
+    else
+    {
+        rootTabBarController.selectedIndex = 0;
+        [self startupBlueCats];
     }
     
     return YES;
+}
+
+- (void)startupBlueCatsWithAppToken:(NSString *)appToken
+{
+    NSUUID *appTokenUUID = [[NSUUID alloc] initWithUUIDString:appToken];
+    if (appTokenUUID )
+    {
+        _appToken = appTokenUUID.UUIDString;
+        
+        [[NSUserDefaults standardUserDefaults] setObject:_appToken forKey:BCAppTokenPreferenceKey];
+        
+        [self startupBlueCats];
+    }
+}
+
+- (void)startupBlueCats
+{
+    [BlueCatsSDK setOptions:@{BCOptionUseLocalStorage:@(YES),
+                              BCOptionCrowdSourceBeaconUpdates:@(NO)}];
+    
+    [BlueCatsSDK startPurringWithAppToken:self.appToken
+                               completion:^(BCStatus status)
+     {
+         if ((status == kBCStatusPurringWithErrors) && (![BlueCatsSDK isLocationAuthorized])) {
+             [BlueCatsSDK requestAlwaysLocationAuthorization];
+         }
+     }];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
