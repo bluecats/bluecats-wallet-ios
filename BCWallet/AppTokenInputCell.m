@@ -13,6 +13,8 @@
 - (void)awakeFromNib
 {
     // Initialization code
+    self.textField.font = [UIFont systemFontOfSize:11];
+    self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -36,6 +38,11 @@
         NSString *message = @"Copy and Paste From BC Reveal";
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alert show];
+        
+        if ([self.delegate respondsToSelector:@selector(cell:failedToUpdateAppToken:)])
+        {
+            [self.delegate cell:self failedToUpdateAppToken:textField.text];
+        }
     }
 }
 

@@ -100,7 +100,7 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     
     if (appDelegate.appToken.length <= 0)
     {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! AppToken Missing or Invalid" message:@"Input the app token in the settings tab. You can copy an appToken to the clipboard in BC Reveal." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! AppToken Missing" message:@"Input the app token in the settings tab. You can copy an appToken to the clipboard in BC Reveal." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         
         return NO;

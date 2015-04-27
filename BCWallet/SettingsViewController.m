@@ -90,4 +90,10 @@ static NSString *appTokenCellIdentifier = @"AppTokenInputCellIdentifier";
     }
 }
 
+- (void)cell:(AppTokenInputCell *)cell failedToUpdateAppToken:(NSString *)appToken
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    cell.textField.text = appDelegate.appToken;
+}
+
 @end

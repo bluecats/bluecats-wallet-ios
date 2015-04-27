@@ -14,6 +14,7 @@
 
 @optional
 - (void)cell:(AppTokenInputCell *)cell didUpdateAppToken:(NSString *)appToken;
+- (void)cell:(AppTokenInputCell *)cell failedToUpdateAppToken:(NSString *)appToken;
 
 @end
 
