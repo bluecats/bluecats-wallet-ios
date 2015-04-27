@@ -33,7 +33,6 @@
 		56E749E11AC0711300A2589E /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749DA1AC0711300A2589E /* UIViewController+Additions.m */; };
 		56E749E21AC0711300A2589E /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E749DC1AC0711300A2589E /* UIColor+Additions.m */; };
 		5C0301ABD3321C1E0127F929 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A46D4F87D8AC6054DD2534E4 /* libPods.a */; };
-		A65AE18D1AC220810056C420 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A65AE18C1AC220810056C420 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,7 +84,6 @@
 		56E749DC1AC0711300A2589E /* UIColor+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Additions.m"; sourceTree = "<group>"; };
 		8FB5ACD00D0D8C3808D073B5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		A46D4F87D8AC6054DD2534E4 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A65AE18C1AC220810056C420 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		BDBF66E773D13BC37548156A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -154,7 +152,6 @@
 			children = (
 				56E749771AC0692D00A2589E /* Info.plist */,
 				56E749781AC0692D00A2589E /* main.m */,
-				A65AE18C1AC220810056C420 /* Settings.bundle */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -307,7 +304,6 @@
 			files = (
 				56E749CA1AC070D600A2589E /* logo.png in Resources */,
 				56E749A41AC06B9100A2589E /* Images.xcassets in Resources */,
-				A65AE18D1AC220810056C420 /* Settings.bundle in Resources */,
 				56E749A11AC06B6F00A2589E /* LaunchScreen.xib in Resources */,
 				56E749A21AC06B6F00A2589E /* Main.storyboard in Resources */,
 			);
