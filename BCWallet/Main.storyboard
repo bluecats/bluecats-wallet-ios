@@ -215,7 +215,7 @@
             <objects>
                 <navigationController id="j6T-cE-1Me" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" title="Cards" id="vfD-bf-o9S"/>
+                    <tabBarItem key="tabBarItem" title="Cards" image="creditcard" id="vfD-bf-o9S"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" translucent="NO" id="lux-az-5AJ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -289,7 +289,7 @@
                             <constraint firstAttribute="trailing" secondItem="O3f-wH-202" secondAttribute="trailing" id="zL0-1h-dFl"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Settings" id="QeG-32-u8n"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="settings" id="QeG-32-u8n"/>
                     <connections>
                         <outlet property="tableview" destination="O3f-wH-202" id="9ko-5p-kyi"/>
                     </connections>
@@ -343,4 +343,8 @@
             <point key="canvasLocation" x="425" y="491"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="creditcard" width="50" height="50"/>
+        <image name="settings" width="50" height="50"/>
+    </resources>
 </document>
