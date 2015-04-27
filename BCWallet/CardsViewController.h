@@ -12,7 +12,7 @@
 #import "CardCell.h"
 #import "NSManagedObject+Additions.h"
 
-@interface CardsViewController : UITableViewController
+@interface CardsViewController : UITableViewController <CardCellDelegate>
 
 @property (nonatomic) NSManagedObjectContext *managedContext;
 

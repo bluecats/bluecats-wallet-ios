@@ -20,6 +20,7 @@
     [super awakeFromNib];
     
     self.indicator.hidden = YES;
+    [self.getBalanceButton addTarget:self action:@selector(didPressGetBalanceButton:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)setCard:(Card *)card
@@ -72,6 +73,13 @@
     [self.indicator stopAnimating];
     
     self.isShowingActivity = NO;
+}
+
+- (void)didPressGetBalanceButton:(id)sender
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pressedGetBalanceButtonForCell:)]) {
+        [self.delegate pressedGetBalanceButtonForCell:self];
+    }
 }
 
 @end

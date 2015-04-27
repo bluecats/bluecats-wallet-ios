@@ -228,11 +228,9 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     return NSNotFound;
 }
 
-- (BCBeacon *)closestRegisterBeacon
+- (BCBeacon *)closestRegisterBeaconForRegisters:(NSArray *)registers
 {
-    NSArray *registerBeacons = self.nearbyRegisterBeaconForSerialNumber.allValues;
-    
-    return [[registerBeacons sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    return [[registers sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         BCBeacon *b1 = (BCBeacon *)obj1;
         BCBeacon *b2 = (BCBeacon *)obj2;
         
@@ -267,9 +265,14 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     });
 }
 
+- (NSData *)jsonDataForCard:(Card *)card
+{
+    return [NSJSONSerialization dataWithJSONObject:@{WalletDataTypeTinyKey: [NSString stringWithFormat:@"%@", @(WalletDataTypeCardBalanceRequest)], WalletCardBarcodeTinyKey: card.barcode, WalletMerchantIDTinyKey: card.merchant.merchantID} options:0 error:nil];
+}
+
 - (void)requestCurrentBalances
 {
-    BCBeacon *closestRegisterBeacon = [self closestRegisterBeacon];
+    BCBeacon *closestRegisterBeacon = [self closestRegisterBeaconForRegisters:self.nearbyRegisterBeaconForSerialNumber.allValues];
     if (!closestRegisterBeacon) {
         [self endRefreshingOnMainQueue];
         return;
@@ -284,11 +287,20 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     NSMutableArray *requestDataArray = [NSMutableArray array];
     for (Card *card in cardsForClosestRegisterBeacon) {
         
-        NSData *requestData = [NSJSONSerialization dataWithJSONObject:@{WalletDataTypeTinyKey: [NSString stringWithFormat:@"%@", @(WalletDataTypeCardBalanceRequest)], WalletCardBarcodeTinyKey: card.barcode, WalletMerchantIDTinyKey: card.merchant.merchantID} options:0 error:nil];
+        NSData *requestData = [self jsonDataForCard:card];
         [requestDataArray addObject:requestData];
     }
     
-    [closestRegisterBeacon requestDataArrayFromBeaconEndpoint:BCBeaconEndpointUSBHost withDataArray:requestDataArray success:^(NSArray *responseDataArray) {
+    [self requestDataArray:requestDataArray fromRegisterBeacon:closestRegisterBeacon success:^{
+        [self reloadCardsOnMainQueue];
+    } failure:^{
+        [self.refreshControl endRefreshing];
+    }];
+}
+
+- (void)requestDataArray:(NSArray *)requestDataArray fromRegisterBeacon:(BCBeacon *)registerBeacon success:(void (^)())success failure:(void (^)())failure
+{
+    [registerBeacon requestDataArrayFromBeaconEndpoint:BCBeaconEndpointUSBHost withDataArray:requestDataArray success:^(NSArray *responseDataArray) {
         
         for (NSData *responseData in responseDataArray) {
             
@@ -334,7 +346,10 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
         }
         
         [self saveContext];
-        [self reloadCardsOnMainQueue];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            success();
+        });
         
     } status:^(NSString *status) {
         
@@ -342,7 +357,7 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
         
     } failure:^(NSError *error) {
         
-        NSString *message = [NSString stringWithFormat:@"Unable to get balance from register %@.", closestRegisterBeacon.registerID];
+        NSString *message = [NSString stringWithFormat:@"Unable to get balance from register %@.", registerBeacon.registerID];
         
         NSString *title = @"Balance Requests Failed";
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
@@ -353,8 +368,10 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [alertView show];
-            [self.refreshControl endRefreshing];
+            failure();
         });
+        
+        
         
     }];
 }
@@ -539,6 +556,16 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     CardCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     Card *card = [self.cards objectAtIndex:indexPath.row];
     cell.card = card;
+    cell.delegate = self;
+    
+    if ([self.nearbyRegisterBeaconsForMerchantID objectForKey:card.merchant.merchantID]) {
+        cell.getBalanceButton.hidden = NO;
+    }
+    else
+    {
+        cell.getBalanceButton.hidden = YES;
+    }
+    
     return cell;
 }
 
@@ -805,6 +832,23 @@ NSString * const kTransactionCardIndexKey = @"kTransactionCardIndexKey";
     }
 }
 
+#pragma cardcell delegate
+
+- (void) pressedGetBalanceButtonForCell:(CardCell *)cell
+{
+    
+    BCBeacon *closestRegisterBeacon = [self closestRegisterBeaconForRegisters:[self.nearbyRegisterBeaconsForMerchantID objectForKey:cell.card.merchant.merchantID]];
+    NSArray *reqDataArray = @[[self jsonDataForCard:cell.card]];
+    
+    [cell showActivity];
+    
+    [self requestDataArray:reqDataArray fromRegisterBeacon:closestRegisterBeacon success:^{
+        [cell endActivity];
+        [self reloadCardsOnMainQueue];
+    } failure:^{
+        [cell endActivity];
+    }];
+}
 
 static NSString *addCardSegue = @"addCardSegue";
 

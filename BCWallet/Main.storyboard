@@ -9,7 +9,7 @@
         <scene sceneID="JfG-M5-cqI">
             <objects>
                 <tableViewController id="7go-uN-U4i" customClass="CardsViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="100" sectionHeaderHeight="10" sectionFooterHeight="10" id="SXO-kU-zeE">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="130" sectionHeaderHeight="10" sectionFooterHeight="10" id="SXO-kU-zeE">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
@@ -41,27 +41,61 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00000000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qyv-5W-xVl">
-                                            <rect key="frame" x="493" y="82" width="50" height="9"/>
+                                            <rect key="frame" x="493" y="82" width="50" height="17"/>
                                             <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="12"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jJv-Rh-hbA">
+                                            <rect key="frame" x="0.0" y="99" width="600" height="30"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8jd-yl-bC7">
+                                                    <rect key="frame" x="258" y="0.0" width="85" height="30"/>
+                                                    <state key="normal" title="Get Balance">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" red="0.95277969613259672" green="0.95277969613259672" blue="0.95277969613259672" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="centerY" secondItem="8jd-yl-bC7" secondAttribute="centerY" id="G5b-GN-8kd"/>
+                                                <constraint firstAttribute="height" constant="30" id="g9U-Mj-ARC"/>
+                                                <constraint firstAttribute="centerX" secondItem="8jd-yl-bC7" secondAttribute="centerX" id="iiR-Qf-p3k"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="centerY" secondItem="BwW-vD-STp" secondAttribute="centerY" id="2Pz-rl-pJ8"/>
+                                        <constraint firstItem="Qyv-5W-xVl" firstAttribute="top" secondItem="FQG-5f-a18" secondAttribute="bottom" constant="2" id="2cg-Fv-Fvz"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="FQG-5f-a18" secondAttribute="trailing" constant="10" id="5Lc-47-JG0"/>
+                                        <constraint firstAttribute="bottom" secondItem="jJv-Rh-hbA" secondAttribute="bottom" id="7M2-8A-W2r"/>
+                                        <constraint firstItem="jJv-Rh-hbA" firstAttribute="leading" secondItem="hV6-0Z-wu5" secondAttribute="leading" id="7rn-0f-Qco"/>
                                         <constraint firstAttribute="centerY" secondItem="WNI-9H-LUW" secondAttribute="centerY" id="8hU-py-JPo"/>
                                         <constraint firstItem="BwW-vD-STp" firstAttribute="leading" secondItem="hV6-0Z-wu5" secondAttribute="leadingMargin" id="9aH-KF-3Uk"/>
+                                        <constraint firstItem="BwW-vD-STp" firstAttribute="centerY" secondItem="FQG-5f-a18" secondAttribute="centerY" id="Ak4-yM-sxk"/>
+                                        <constraint firstItem="BwW-vD-STp" firstAttribute="top" secondItem="hV6-0Z-wu5" secondAttribute="topMargin" constant="32" id="Asm-g7-ogr"/>
                                         <constraint firstItem="WNI-9H-LUW" firstAttribute="leading" secondItem="BwW-vD-STp" secondAttribute="trailing" constant="15" id="IBk-JZ-QR0"/>
                                         <constraint firstAttribute="centerY" secondItem="FQG-5f-a18" secondAttribute="centerY" id="bqt-qA-Elo"/>
+                                        <constraint firstAttribute="trailing" secondItem="jJv-Rh-hbA" secondAttribute="trailing" id="fcO-mA-g9z"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="Qyv-5W-xVl" secondAttribute="bottom" id="flm-cs-8qA"/>
                                         <constraint firstItem="Qyv-5W-xVl" firstAttribute="top" secondItem="FQG-5f-a18" secondAttribute="bottom" id="onk-BB-wUo"/>
                                         <constraint firstItem="FQG-5f-a18" firstAttribute="centerX" secondItem="Qyv-5W-xVl" secondAttribute="centerX" id="xKj-UY-KGz"/>
+                                        <constraint firstItem="BwW-vD-STp" firstAttribute="centerY" secondItem="WNI-9H-LUW" secondAttribute="centerY" id="xX2-bR-KvC"/>
                                     </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="2Pz-rl-pJ8"/>
+                                            <exclude reference="8hU-py-JPo"/>
+                                            <exclude reference="bqt-qA-Elo"/>
+                                            <exclude reference="2cg-Fv-Fvz"/>
+                                            <exclude reference="flm-cs-8qA"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="barcodeLabel" destination="Qyv-5W-xVl" id="9PH-qy-mdY"/>
                                     <outlet property="currentBalanceLabel" destination="WNI-9H-LUW" id="UF7-I3-nEp"/>
+                                    <outlet property="getBalanceButton" destination="8jd-yl-bC7" id="yhs-Zv-1sI"/>
                                     <outlet property="indicator" destination="BwW-vD-STp" id="LVE-s1-X3N"/>
                                     <outlet property="logoImageView" destination="FQG-5f-a18" id="nyQ-2H-zQ9"/>
                                 </connections>
@@ -344,7 +378,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="creditcard" width="50" height="50"/>
-        <image name="settings" width="50" height="50"/>
+        <image name="creditcard" width="40" height="40"/>
+        <image name="settings" width="30" height="30"/>
     </resources>
 </document>
