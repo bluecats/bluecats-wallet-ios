@@ -6,13 +6,13 @@ BlueCats Wallet for iOS works with BC Wallet for [OS X](https://github.com/bluec
 
 [PDF Guide](https://drive.google.com/file/d/0BxJOlyJ2qnYqX3dGbklhOHdKb0E/view?usp=sharing) to using BC Wallet for iOS with BC Wallet for OS X.
 
-####Entering a Gift Card
+#### Entering a Gift Card
 Open BC Wallet for iOS and press the plus sign in the top right hand corner to add a gift card.  Select the merchant and enter the respective barcode for that card. Then press **Save**.
 
-####Sending a Balance Request
+#### Sending a Balance Request
 Pull down on the mobile card list to request card balances to the USB beacon over a single BLE connection.  This will update the current balances for your cards.
 
-####Card Redemption Requests
+#### Card Redemption Requests
 When card redemption requests are received within the appropriate proximity, BC Wallet for iOS will prompt for an amount to be applied to the purchase.
 
 If the mobile has more than one gift card for the merchant, the one with the lowest balance will be redeemed first. If a gift card with a balance less than the remaining amount of the transaction is redeemed, then it will be re-tendered.
